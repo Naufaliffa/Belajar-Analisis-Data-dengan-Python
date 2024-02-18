@@ -33,9 +33,39 @@ if st.sidebar.checkbox("Show Summary Statistics"):
     st.subheader("Summary Statistics")
     st.write(data.describe())
 
+#comparation
+# Filter tahun 2011  dan hari kerja (workingday = 0)
+filtered_data0 = data[(data["yr"] == 0) & (data["workingday"] == 0)]
+
+# Hitung jumlah total sepeda sewaan
+total_sewa_sepeda0 = filtered_data0["cnt"].sum()
+
+print("Jumlah total sewa sepeda pada hari kerja pada tahun 2011:", total_sewa_sepeda0)
+
+# Filter tahun 2011  dan hari kerja (workingday = 1)
+filtered_data = data[(data["yr"] == 0) & (data["workingday"] == 1)]
+
+# Hitung jumlah total sepeda sewaan
+total_sewa_sepeda = filtered_data["cnt"].sum()
+
+print("Jumlah total sewa sepeda pada hari kerja pada tahun 2011:", total_sewa_sepeda)
+
+komparasi = pd.DataFrame({'workingday':[0,1],
+                          'Total_Sewa':[total_sewa_sepeda0,total_sewa_sepeda]})
+
+komparasi.head()
+
 # VISUALIZATION
 
 st.subheader("Data Visualization")
+
+st.subheader("Comparison of 2011 bicycle renters on weekdays and non-working days")
+fig = px.bar(data, x=komparasi['workingday'], y=komparasi['Total_Sewa'], title='Comparison of 2011 bicycle renters on weekdays and non-working days')
+st.plotly_chart(fig, use_container_width=True)
+
+st.subheader("Relationship between temperature and the number of casual users")
+fig = px.scatter(data, x='temp', y='casual', title='relationship between temperature and the number of casual users')
+st.plotly_chart(fig, use_container_width=True)
 
 st.subheader("Total Rental Bikes Over Time")
 fig = px.line(data, x='dteday', y='cnt', title='Total Rental Bikes Over Time')
